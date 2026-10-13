@@ -15,6 +15,24 @@ public void Add(Card card) // Tar emot ett kort när Round delar ut eller spelar
 
     public void Clear() // ANropas i blrjan av varje runda
     {
-        _cards.Clear(); // Tömmer handen så att förra rundans kort inte påverkar värdet.
+        _cards.Clear(); // Tömmer handen så att fö
+        //förra rundans kort inte påverkar värdet.
+      }
+
+private int HardTotal() // Sumamn där alla ess räknas som 1
+    {
+        int total = 0;
+        foreach (Card card in _cards)  // gå igenom varje kort på handen, ett i taget.
+        {
+            if (card.Rank == Rank.Ace) // Är kortet ett ess?
+                total += 1; // Om svaret blir ja: lägg till 1
+            else if (card.Rank >= Rank.Ten) // Annars, är det tio, knekt, dam eller kund?
+                total += 10; // Ja: lägg till 10
+            else 
+            total += (int)card.Rank; // 2-9 är sitt eget värde
+        }
+        return total;
+
+        }
     }
-}
+
