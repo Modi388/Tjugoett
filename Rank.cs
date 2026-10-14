@@ -2,7 +2,7 @@ namespace Tjugoett;
 
 public enum Rank
 {
-    Two = 2,
+    Two,
     Three,
     Four,
     Five,
@@ -11,8 +11,8 @@ public enum Rank
     Eight,
     Nine,
     Ten,
-    Jack = 10,
-    Queen = 10,
-    King = 10,
-    Ace = 11
+    Jack,
+    Queen,
+    King,
+    Ace
 }
