@@ -12,4 +12,8 @@ public class Deck
         // två loopar i varandra: varje Suit kombinerad med varje Rank
         // skapa ett nytt Card och lägg det i listan
     }
+
+    public int Remaining => _cards.Count; 
+   
+
 }
