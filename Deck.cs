@@ -14,11 +14,20 @@ public class Deck
         {
             foreach (Rank rank in Enum.GetValues<Rank>())
 
-                _cards.Add(new Card(suit,rank));
+                _cards.Add(new Card(suit, rank));
+        }
+        Shuffle();
     }
-    }
+
     public int Remaining => _cards.Count;
 
-
+    private void Shuffle()
+    {
+        for (int i = _cards.Count - 1; i > 0; i--)
+        {
+            int j = _random.Next(i + 1);
+            (_cards[i], _cards[j]) = (_cards[j], _cards[i]);
+        }
+    }
 
 }
