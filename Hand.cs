@@ -19,20 +19,16 @@ public void Add(Card card) // Tar emot ett kort när Round delar ut eller spelar
         //förra rundans kort inte påverkar värdet.
       }
 
-private int HardTotal() // Sumamn där alla ess räknas som 1
+private int HardTotal() // Summan där alla ess räknas som 1
     {
         int total = 0;
-        foreach (Card card in _cards)  // gå igenom varje kort på handen, ett i taget.
+        foreach (Card card in _cards) // Gå igenom varje kort på handen, ett i taget
         {
             if (card.Rank == Rank.Ace) // Är kortet ett ess?
-                total += 1; // Om svaret blir ja: lägg till 1
-            else if (card.Rank >= Rank.Ten) // Annars, är det tio, knekt, dam eller kund?
-                total += 10; // Ja: lägg till 10
-            else 
-            total += (int)card.Rank; // 2-9 är sitt eget värde
+                total += 1; // Ja: räkna det som 1 (vi lägger till 10 senare i Value om det ryms)
+            else
+                total += card.Points; // Annars: ta poängen från kortet (2-10 sitt tal, klädda kort 10)
         }
         return total;
-
-        }
     }
-
+    }
