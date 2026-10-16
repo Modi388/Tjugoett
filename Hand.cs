@@ -31,4 +31,42 @@ private int HardTotal() // Summan där alla ess räknas som 1
         }
         return total;
     }
+
+private bool HasAce() // Finns det något ess på handen?
+    {
+        foreach (Card card in _cards) // Gå igenom varje kort
+        {
+            if (card.Rank == Rank.Ace) // Hittar vi ett ess
+            return true; // Då svarar vi ja direkt
+
+        }
+        return false; // Inget ess hittades
+
+    }  
+
+    public bool IsSoft // Mjuk hand = ett ess räknas som 11
+    {
+        get { return HasAce() && HardTotal() + 10 <= 21; } // Finns ess OCH ryms det att lägga till 10?
     }
+
+     public int Value // Handens värde, räknas om varje gång så att esset kan byta värde
+    {
+        get
+        {
+            if (IsSoft) // Mjuk hand: ett ess räknas som 11
+                return HardTotal() + 10;
+            return HardTotal(); // Annars räknas alla ess som 1
+        }
+    }
+
+    public bool IsBust // Spräckt = över 21
+    {
+        get { return Value > 21; }
+    }
+
+    public bool IsBlackjack // Naturlig tjugoett = exakt två kort och värde 21
+    {
+        get { return _cards.Count == 2 && Value == 21; }
+    }
+
+}
