@@ -29,5 +29,12 @@ public class Deck
             (_cards[i], _cards[j]) = (_cards[j], _cards[i]);
         }
     }
+    public Card Draw()
+    {
+        Card card = _cards[_cards.Count - 1];
+        _cards.RemoveAt(_cards.Count - 1);
+        return card;
+    }
 
 }
+
