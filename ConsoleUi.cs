@@ -1,0 +1,57 @@
+namespace Tjugoett;
+
+public class ConsoleUi
+{
+    // Gör om ett kort till kort text, t.ex. "♥A" eller "♠10".
+    public string FormatCard(Card card)
+    {
+        return SuitSymbol(card.Suit) + RankText(card.Rank);
+    }
+
+    // Färgen som symbol
+    private string SuitSymbol(Suit suit)
+    {
+        return suit switch
+        {
+            Suit.Hearts => "♥",
+            Suit.Diamonds => "♦",
+            Suit.Clubs => "♣",
+            Suit.Spades => "♠",
+            _ => "?"
+        };
+    }
+
+    // Valören som kort svensk text. Bygger inte på enumens tal.
+    private string RankText(Rank rank)
+    {
+        return rank switch
+        {
+            Rank.Two => "2",
+            Rank.Three => "3",
+            Rank.Four => "4",
+            Rank.Five => "5",
+            Rank.Six => "6",
+            Rank.Seven => "7",
+            Rank.Eight => "8",
+            Rank.Nine => "9",
+            Rank.Ten => "10",
+            Rank.Jack => "Kn",
+            Rank.Queen => "D",
+            Rank.King => "K",
+            Rank.Ace => "A",
+            _ => "?"
+        };
+    }
+
+    // Skriver ut ett kort. Hjärter och ruter blir röda.
+    private void WriteCard(Card card)
+    {
+        if (card.Suit == Suit.Hearts || card.Suit == Suit.Diamonds)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+        }
+
+        Console.Write(FormatCard(card));
+        Console.ResetColor();
+    }
+}
