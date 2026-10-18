@@ -3,12 +3,14 @@ namespace Tjugoett;
 public class Deck
 {
     private readonly List<Card> _cards = new();
-
     private readonly Random _random;
-    public Deck(Random random)
+    private readonly int _deckCount;
+
+    public Deck(Random random, int deckCount = 1)
     {
         //(fältet = parametern)
         _random = random;
+        _deckCount = deckCount;
         BuildCards();
         Shuffle();
 
@@ -34,11 +36,14 @@ public class Deck
 
     private void BuildCards()
     {
-        foreach (Suit suit in Enum.GetValues<Suit>())
+        for (int i = 0; i <_deckCount; i++)
         {
-            foreach (Rank rank in Enum.GetValues<Rank>())
+            foreach (Suit suit in Enum.GetValues<Suit>())
+            {
+                foreach (Rank rank in Enum.GetValues<Rank>())
 
-                _cards.Add(new Card(suit, rank));
+                    _cards.Add(new Card(suit, rank));
+            }
         }
     }
 
