@@ -4,6 +4,15 @@ namespace Tjugoett;
 // Hanterar en spelrunda
 public class Round
 {
+        // Kortleken som används under spelrundan
+    private readonly Deck _deck;
+
+    // Tar emot kortleken som ska användas
+    public Round(Deck deck)
+    {
+        _deck = deck;
+    }
+    
     // Avgör resultatet mellan spelaren och dealern
     public static Outcome Resolve(Hand player, Hand dealer)
     {
