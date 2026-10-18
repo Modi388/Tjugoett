@@ -9,17 +9,13 @@ public class Deck
     {
         //(fältet = parametern)
         _random = random;
-
-        foreach (Suit suit in Enum.GetValues<Suit>())
-        {
-            foreach (Rank rank in Enum.GetValues<Rank>())
-
-                _cards.Add(new Card(suit, rank));
-        }
+        BuildCards();
         Shuffle();
+
     }
 
     public int Remaining => _cards.Count;
+    public bool NeedsReshuffle => Remaining < 15;
 
     private void Shuffle()
     {
@@ -29,5 +25,29 @@ public class Deck
             (_cards[i], _cards[j]) = (_cards[j], _cards[i]);
         }
     }
+    public Card Draw()
+    {
+        Card card = _cards[_cards.Count - 1];
+        _cards.RemoveAt(_cards.Count - 1);
+        return card;
+    }
+
+    private void BuildCards()
+    {
+        foreach (Suit suit in Enum.GetValues<Suit>())
+        {
+            foreach (Rank rank in Enum.GetValues<Rank>())
+
+                _cards.Add(new Card(suit, rank));
+        }
+    }
+
+    public void Reset()
+    {
+        _cards.Clear();
+        BuildCards();
+        Shuffle();
+    }
 
 }
+
