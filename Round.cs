@@ -4,13 +4,21 @@ namespace Tjugoett;
 // Hanterar en spelrunda
 public class Round
 {
-        // Kortleken som används under spelrundan
+    // Kortleken som används under spelrundan
     private readonly Deck _deck;
 
-    // Tar emot kortleken som ska användas
-    public Round(Deck deck)
+    // Givaren som deltar i spelrundan
+    private readonly Dealer _dealer;
+
+    // Spelarna som deltar i spelrundan
+    private readonly List<Player> _players;
+
+    // Tar emot kortleken, givaren och spelarna
+    public Round(Deck deck, Dealer dealer, List<Player> players)
     {
         _deck = deck;
+        _dealer = dealer;
+        _players = players;
     }
     
     // Avgör resultatet mellan spelaren och dealern
