@@ -12,12 +12,25 @@ public class GameStorage
     public List<PlayerRecord> Load()
     {
         List<PlayerRecord> records = new();
+
         if (!File.Exists(_filePath))
         {
             return records;
         }
 
-        string[] lines = File.ReadAllLines(_filePath);
+        string[] lines;
+        try
+        {
+            lines = File.ReadAllLines(_filePath);
+        }
+        catch (IOException)
+        {
+            return records;
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return records;
+        }
 
         foreach (string line in lines)
         {
@@ -27,6 +40,7 @@ public class GameStorage
             {
                 continue;
             }
+
             if (!int.TryParse(parts[1], out int wins) ||
                 !int.TryParse(parts[2], out int losses) ||
                 !int.TryParse(parts[3], out int pushes))
@@ -36,8 +50,7 @@ public class GameStorage
 
             records.Add(new PlayerRecord(parts[0], wins, losses, pushes));
         }
+
         return records;
     }
-
 }
-
