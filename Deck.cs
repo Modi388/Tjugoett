@@ -5,6 +5,7 @@ public class Deck
     private readonly List<Card> _cards = new();
     private readonly Random _random;
     private readonly int _deckCount;
+    private int _cutCard;
 
     public Deck(Random random, int deckCount = 1)
     {
@@ -13,11 +14,11 @@ public class Deck
         _deckCount = deckCount;
         BuildCards();
         Shuffle();
-
+        PlaceCutCard();
     }
 
     public int Remaining => _cards.Count;
-    public bool NeedsReshuffle => Remaining < 15;
+    public bool NeedsReshuffle => Remaining <= _cutCard;
 
     private void Shuffle()
     {
@@ -27,6 +28,13 @@ public class Deck
             (_cards[i], _cards[j]) = (_cards[j], _cards[i]);
         }
     }
+
+    private void PlaceCutCard()
+    {
+        int quarter = _cards.Count / 4;
+        _cutCard = _random.Next(1, quarter + 1);
+    }
+
     public Card Draw()
     {
         Card card = _cards[_cards.Count - 1];
@@ -52,6 +60,7 @@ public class Deck
         _cards.Clear();
         BuildCards();
         Shuffle();
+        PlaceCutCard();
     }
 
 }
