@@ -19,6 +19,7 @@ public class Deck
 
     public int Remaining => _cards.Count;
     public bool NeedsReshuffle => Remaining <= _cutCard;
+    public double DecksRemaining => Remaining / 52.0;
 
     private void Shuffle()
     {
