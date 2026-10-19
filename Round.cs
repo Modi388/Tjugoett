@@ -68,7 +68,7 @@ public class Round
                 {
                     break;
                 }
-
+                
                 // Ger spelaren ett nytt kort
                 player.ReceiveCard(_deck.Draw());
             }
