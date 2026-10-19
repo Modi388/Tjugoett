@@ -192,4 +192,65 @@ public class ConsoleUi
         }
         Console.WriteLine(")");
     }
+    // Visar huvudmenyn och returnerar spelarens val (1-4).
+    public int ShowMenu()
+    {
+        Console.WriteLine();
+        Console.WriteLine("=== TJUGOETT ===");
+        Console.WriteLine("1. Lägg till spelare");
+        Console.WriteLine("2. Spela en runda");
+        Console.WriteLine("3. Visa statistik");
+        Console.WriteLine("4. Avsluta");
+        return AskNumber("Välj (1-4): ", 1, 4);
+    }
+    // Visar slutläget efter en runda: alla händer och varje spelares resultat.
+    public void ShowResults(Dealer dealer, Dictionary<Player, Outcome> results)
+    {
+        Console.WriteLine();
+        Console.WriteLine("--- Resultat ---");
+        ShowHand(dealer, false);
+
+        foreach (KeyValuePair<Player, Outcome> result in results)
+        {
+            ShowHand(result.Key, false);
+            Console.WriteLine("  → " + OutcomeText(result.Value));
+        }
+    }
+
+    // Översätter ett resultat till svensk text.
+    private string OutcomeText(Outcome outcome)
+    {
+        return outcome switch
+        {
+            Outcome.Win => "Vinst",
+            Outcome.Blackjack => "Vinst med tjugoett!",
+            Outcome.Push => "Lika",
+            Outcome.Lose => "Förlust",
+            _ => "?"
+        };
+    }
+    // Visar vinster, förluster och lika för varje spelare.
+    public void ShowStatistics(List<Player> players)
+    {
+        Console.WriteLine();
+        Console.WriteLine("--- Statistik ---");
+
+        if (players.Count == 0)
+        {
+            Console.WriteLine("Inga spelare än.");
+            return;
+        }
+
+        foreach (Player player in players)
+        {
+            Console.WriteLine(player.Name + ": " + player.Wins + " vinster, "
+                + player.Losses + " förluster, " + player.Pushes + " lika");
+        }
+    }
+
+    // Skriver ut ett kort meddelande till spelaren, t.ex. ett felmeddelande från Game.
+    public void ShowMessage(string message)
+    {
+        Console.WriteLine(message);
+    }
 }
