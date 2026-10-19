@@ -52,6 +52,28 @@ public class Round
             _dealer.ReceiveCard(_deck.Draw());
         }
 
+        // Varje spelare får välja att ta kort eller stanna
+        foreach (Player player in _players)
+        {
+            // Spelaren fortsätter så länge den har under 21 poäng
+            while (!player.Hand.IsBust &&
+                   !player.Hand.IsBlackjack &&
+                   player.Hand.Value < 21)
+            {
+                // Frågar spelaren om Hit eller Stand
+                Move move = player.Decide(_dealer.Upcard);
+
+                // Avslutar spelarens tur om den väljer Stand
+                if (move == Move.Stand)
+                {
+                    break;
+                }
+
+                // Ger spelaren ett nytt kort
+                player.ReceiveCard(_deck.Draw());
+            }
+        }
+
         return results;
     }
 
