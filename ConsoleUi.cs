@@ -167,4 +167,29 @@ public class ConsoleUi
             Console.WriteLine("Skriv ett tal mellan " + min + " och " + max + ".");
         }
     }
+
+
+    // Visar läget när en mänsklig spelare ska välja:
+    // givarens öppna kort och spelarens egen hand.
+    public void ShowTurn(string playerName, Hand hand, Card dealerUpcard)
+    {
+        Console.WriteLine();
+        Console.Write("Givarens öppna kort: ");
+        WriteCard(dealerUpcard);
+        Console.WriteLine();
+
+        Console.Write(playerName + ": ");
+        foreach (Card card in hand.Cards)
+        {
+            WriteCard(card);
+            Console.Write(" ");
+        }
+
+        Console.Write("(" + hand.Value);
+        if (hand.IsSoft)
+        {
+            Console.Write(" mjuk");
+        }
+        Console.WriteLine(")");
+    }
 }
