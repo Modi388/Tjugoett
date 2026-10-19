@@ -1,4 +1,3 @@
-
 namespace Tjugoett;
 
 // Hanterar en spelrunda
@@ -12,13 +11,17 @@ public class Round
 
     // Spelarna som deltar i spelrundan
     private readonly List<Player> _players;
+    
+    // Räknar korten som syns (tillval 5)
+    private readonly CardCounter _counter;
 
     // Tar emot kortleken, givaren och spelarna
-    public Round(Deck deck, Dealer dealer, List<Player> players)
+    public Round(Deck deck, Dealer dealer, List<Player> players, CardCounter counter)
     {
         _deck = deck;
         _dealer = dealer;
         _players = players;
+        _counter = counter;
     }
 
     // Startar en ny spelrunda
