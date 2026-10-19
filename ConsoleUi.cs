@@ -3,6 +3,10 @@ namespace Tjugoett;
 
 public class ConsoleUi
 {
+    public ConsoleUi()
+    {
+        Console.OutputEncoding = System.Text.Encoding.UTF8;   // så att ♥♦♣♠ visas rätt
+    }
     // Gör om ett kort till kort text, t.ex. "♥A" eller "♠10".
     public string FormatCard(Card card)
     {

@@ -107,8 +107,26 @@ public class Game
     }
 
     // Spelar en runda. Byggs i nästa steg.
+    // Spelar en runda med spelarna vid bordet, visar resultatet och sparar.
     private void PlayRound()
     {
-        _ui.ShowMessage("Kommer i nästa steg.");
+        if (_tablePlayers.Count == 0)
+        {
+            _ui.ShowMessage("Lägg till minst en spelare först (val 1).");
+            return;
+        }
+
+        _ui.ShowMessage("");
+        _ui.ShowMessage("--- Ny runda ---");
+
+        Round round = new Round(_deck, _dealer, _tablePlayers);
+        Dictionary<Player, Outcome> results = round.Play();
+
+        _ui.ShowResults(_dealer, results);
+
+        if (!_storage.Save(_allPlayers))
+        {
+            _ui.ShowMessage("Varning: kunde inte spara resultaten till fil.");
+        }
     }
 }
