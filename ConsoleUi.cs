@@ -125,4 +125,46 @@ public class ConsoleUi
             Console.WriteLine("Tjugoett!");
         }
     }
+
+
+    // Frågar hur många spelare som ska vara med och vad de heter.
+    // max = hur många som får plats (1–5 minus de som redan finns).
+    public List<string> AskPlayerNames(int max)
+    {
+        int count = AskNumber("Hur många spelare (1-" + max + ")? ", 1, max);
+
+        List<string> names = new List<string>();
+        for (int i = 1; i <= count; i++)
+        {
+            string name = "";
+            while (name == "")
+            {
+                Console.Write("Namn på spelare " + i + ": ");
+                name = (Console.ReadLine() ?? "").Trim();
+
+                if (name == "")
+                {
+                    Console.WriteLine("Namnet får inte vara tomt.");
+                }
+            }
+            names.Add(name);
+        }
+        return names;
+    }
+
+    // Frågar efter ett heltal mellan min och max. Frågar igen tills svaret är giltigt.
+    private int AskNumber(string question, int min, int max)
+    {
+        while (true)
+        {
+            Console.Write(question);
+            string input = Console.ReadLine() ?? "";
+
+            if (int.TryParse(input, out int number) && number >= min && number <= max)
+            {
+                return number;
+            }
+            Console.WriteLine("Skriv ett tal mellan " + min + " och " + max + ".");
+        }
+    }
 }
