@@ -53,4 +53,27 @@ public class GameStorage
 
         return records;
     }
+
+    public bool Save(IEnumerable<Player> players)
+    {
+        List<string> lines = new();
+
+        foreach (Player player in players)
+        {
+            lines.Add($"{player.Name};{player.Wins};{player.Losses};{player.Pushes}");
+        }
+        try
+        {
+            File.WriteAllLines(_filePath, lines);
+            return true;
+        }
+        catch (IOException)
+        {
+            return false;
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return false;
+        }
+    }
 }

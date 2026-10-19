@@ -1,3 +1,6 @@
+using System.Formats.Asn1;
+using Tjugoett;
+
 namespace Tjugoett;
 
 public class ConsoleUi
@@ -54,4 +57,35 @@ public class ConsoleUi
         Console.Write(FormatCard(card));
         Console.ResetColor();
     }
+    // Frågar spelaren om köpa eller stanna. Frågar igen tills svaret är giltigt.
+    public Move AskMove()
+    {
+        while (true)
+        {
+            Console.Write("Vill du köpa (k) eller stanna (s)? ");
+            string? input = Console.ReadLine();
+
+            if (input == null)
+            {
+                return Move.Stand;   // inmatningen tog slut, stanna hellre än att krascha
+            }
+
+            string answer = input.Trim().ToLower();
+
+            if (answer == "k")
+            {
+                return Move.Hit;
+            }
+            if (answer == "s")
+            {
+                return Move.Stand;
+            }
+
+            Console.WriteLine("Ogiltigt val. Skriv k för att köpa eller s för att stanna.");
+        }
+    }
 }
+
+
+
+
