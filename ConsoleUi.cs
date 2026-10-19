@@ -1,5 +1,3 @@
-using System.Formats.Asn1;
-using Tjugoett;
 
 namespace Tjugoett;
 
@@ -84,8 +82,114 @@ public class ConsoleUi
             Console.WriteLine("Ogiltigt val. Skriv k för att köpa eller s för att stanna.");
         }
     }
+
+    // Visar en deltagares kort och handens värde.
+    // hideHoleCard = true döljer givarens andra kort (hålkortet).
+    public void ShowHand(Participant participant, bool hideHoleCard)
+    {
+        Console.Write(participant.Name + ": ");
+
+        IReadOnlyList<Card> cards = participant.Hand.Cards;
+        for (int i = 0; i < cards.Count; i++)
+        {
+            if (hideHoleCard && i == 1)
+            {
+                Console.Write("[??]");
+            }
+            else
+            {
+                WriteCard(cards[i]);
+            }
+            Console.Write(" ");
+        }
+
+        if (hideHoleCard)
+        {
+            Console.WriteLine();
+            return;
+        }
+
+        Console.Write("(" + participant.Hand.Value);
+        if (participant.Hand.IsSoft)
+        {
+            Console.Write(" mjuk");
+        }
+        Console.WriteLine(")");
+
+        if (participant.Hand.IsBust)
+        {
+            Console.WriteLine("Spräckt!");
+        }
+        else if (participant.Hand.IsBlackjack)
+        {
+            Console.WriteLine("Tjugoett!");
+        }
+    }
+
+
+    // Frågar hur många spelare som ska vara med och vad de heter.
+    // max = hur många som får plats (1–5 minus de som redan finns).
+    public List<string> AskPlayerNames(int max)
+    {
+        int count = AskNumber("Hur många spelare (1-" + max + ")? ", 1, max);
+
+        List<string> names = new List<string>();
+        for (int i = 1; i <= count; i++)
+        {
+            string name = "";
+            while (name == "")
+            {
+                Console.Write("Namn på spelare " + i + ": ");
+                name = (Console.ReadLine() ?? "").Trim();
+
+                if (name == "")
+                {
+                    Console.WriteLine("Namnet får inte vara tomt.");
+                }
+            }
+            names.Add(name);
+        }
+        return names;
+    }
+
+    // Frågar efter ett heltal mellan min och max. Frågar igen tills svaret är giltigt.
+    private int AskNumber(string question, int min, int max)
+    {
+        while (true)
+        {
+            Console.Write(question);
+            string input = Console.ReadLine() ?? "";
+
+            if (int.TryParse(input, out int number) && number >= min && number <= max)
+            {
+                return number;
+            }
+            Console.WriteLine("Skriv ett tal mellan " + min + " och " + max + ".");
+        }
+    }
+
+
+    // Visar läget när en mänsklig spelare ska välja:
+    // givarens öppna kort och spelarens egen hand.
+    public void ShowTurn(string playerName, Hand hand, Card dealerUpcard)
+    {
+        Console.WriteLine();
+        Console.Write("Givarens öppna kort: ");
+        WriteCard(dealerUpcard);
+        Console.WriteLine();
+
+        Console.Write(playerName + ": ");
+        foreach (Card card in hand.Cards)
+        {
+            WriteCard(card);
+            Console.Write(" ");
+        }
+
+        Console.Write("(" + hand.Value);
+        if (hand.IsSoft)
+        {
+            Console.Write(" mjuk");
+        }
+        Console.WriteLine(")");
+    }
 }
-
-
-
-
