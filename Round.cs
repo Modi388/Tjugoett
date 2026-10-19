@@ -73,11 +73,21 @@ public class Round
                 player.ReceiveCard(_deck.Draw());
             }
         }
-        
+
         // Givaren drar kort tills den ska stanna
         while (_dealer.ShouldHit())
         {
             _dealer.ReceiveCard(_deck.Draw());
+        }
+
+        // Avgör och sparar resultatet för varje spelare
+        foreach (Player player in _players)
+        {
+            Outcome outcome = Resolve(player.Hand, _dealer.Hand);
+
+            results[player] = outcome;
+
+            player.RecordOutcome(outcome);
         }
 
         return results;
