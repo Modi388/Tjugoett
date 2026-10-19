@@ -68,10 +68,16 @@ public class Round
                 {
                     break;
                 }
-                
+
                 // Ger spelaren ett nytt kort
                 player.ReceiveCard(_deck.Draw());
             }
+        }
+        
+        // Givaren drar kort tills den ska stanna
+        while (_dealer.ShouldHit())
+        {
+            _dealer.ReceiveCard(_deck.Draw());
         }
 
         return results;
