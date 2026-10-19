@@ -229,4 +229,28 @@ public class ConsoleUi
             _ => "?"
         };
     }
+    // Visar vinster, förluster och lika för varje spelare.
+    public void ShowStatistics(List<Player> players)
+    {
+        Console.WriteLine();
+        Console.WriteLine("--- Statistik ---");
+
+        if (players.Count == 0)
+        {
+            Console.WriteLine("Inga spelare än.");
+            return;
+        }
+
+        foreach (Player player in players)
+        {
+            Console.WriteLine(player.Name + ": " + player.Wins + " vinster, "
+                + player.Losses + " förluster, " + player.Pushes + " lika");
+        }
+    }
+
+    // Skriver ut ett kort meddelande till spelaren, t.ex. ett felmeddelande från Game.
+    public void ShowMessage(string message)
+    {
+        Console.WriteLine(message);
+    }
 }
