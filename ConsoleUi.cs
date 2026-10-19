@@ -192,4 +192,15 @@ public class ConsoleUi
         }
         Console.WriteLine(")");
     }
+    // Visar huvudmenyn och returnerar spelarens val (1-4).
+    public int ShowMenu()
+    {
+        Console.WriteLine();
+        Console.WriteLine("=== TJUGOETT ===");
+        Console.WriteLine("1. Lägg till spelare");
+        Console.WriteLine("2. Spela en runda");
+        Console.WriteLine("3. Visa statistik");
+        Console.WriteLine("4. Avsluta");
+        return AskNumber("Välj (1-4): ", 1, 4);
+    }
 }
