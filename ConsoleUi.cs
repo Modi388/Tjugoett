@@ -1,10 +1,12 @@
-using System.Formats.Asn1;
-using Tjugoett;
 
 namespace Tjugoett;
 
 public class ConsoleUi
 {
+    public ConsoleUi()
+    {
+        Console.OutputEncoding = System.Text.Encoding.UTF8;   // så att ♥♦♣♠ visas rätt
+    }
     // Gör om ett kort till kort text, t.ex. "♥A" eller "♠10".
     public string FormatCard(Card card)
     {
@@ -84,8 +86,175 @@ public class ConsoleUi
             Console.WriteLine("Ogiltigt val. Skriv k för att köpa eller s för att stanna.");
         }
     }
+
+    // Visar en deltagares kort och handens värde.
+    // hideHoleCard = true döljer givarens andra kort (hålkortet).
+    public void ShowHand(Participant participant, bool hideHoleCard)
+    {
+        Console.Write(participant.Name + ": ");
+
+        IReadOnlyList<Card> cards = participant.Hand.Cards;
+        for (int i = 0; i < cards.Count; i++)
+        {
+            if (hideHoleCard && i == 1)
+            {
+                Console.Write("[??]");
+            }
+            else
+            {
+                WriteCard(cards[i]);
+            }
+            Console.Write(" ");
+        }
+
+        if (hideHoleCard)
+        {
+            Console.WriteLine();
+            return;
+        }
+
+        Console.Write("(" + participant.Hand.Value);
+        if (participant.Hand.IsSoft)
+        {
+            Console.Write(" mjuk");
+        }
+        Console.WriteLine(")");
+
+        if (participant.Hand.IsBust)
+        {
+            Console.WriteLine("Spräckt!");
+        }
+        else if (participant.Hand.IsBlackjack)
+        {
+            Console.WriteLine("Tjugoett!");
+        }
+    }
+
+
+    // Frågar hur många spelare som ska vara med och vad de heter.
+    // max = hur många som får plats (1–5 minus de som redan finns).
+    public List<string> AskPlayerNames(int max)
+    {
+        int count = AskNumber("Hur många spelare (1-" + max + ")? ", 1, max);
+
+        List<string> names = new List<string>();
+        for (int i = 1; i <= count; i++)
+        {
+            string name = "";
+            while (name == "")
+            {
+                Console.Write("Namn på spelare " + i + ": ");
+                name = (Console.ReadLine() ?? "").Trim();
+
+                if (name == "")
+                {
+                    Console.WriteLine("Namnet får inte vara tomt.");
+                }
+            }
+            names.Add(name);
+        }
+        return names;
+    }
+
+    // Frågar efter ett heltal mellan min och max. Frågar igen tills svaret är giltigt.
+    private int AskNumber(string question, int min, int max)
+    {
+        while (true)
+        {
+            Console.Write(question);
+            string input = Console.ReadLine() ?? "";
+
+            if (int.TryParse(input, out int number) && number >= min && number <= max)
+            {
+                return number;
+            }
+            Console.WriteLine("Skriv ett tal mellan " + min + " och " + max + ".");
+        }
+    }
+
+
+    // Visar läget när en mänsklig spelare ska välja:
+    // givarens öppna kort och spelarens egen hand.
+    public void ShowTurn(string playerName, Hand hand, Card dealerUpcard)
+    {
+        Console.WriteLine();
+        Console.Write("Givarens öppna kort: ");
+        WriteCard(dealerUpcard);
+        Console.WriteLine();
+
+        Console.Write(playerName + ": ");
+        foreach (Card card in hand.Cards)
+        {
+            WriteCard(card);
+            Console.Write(" ");
+        }
+
+        Console.Write("(" + hand.Value);
+        if (hand.IsSoft)
+        {
+            Console.Write(" mjuk");
+        }
+        Console.WriteLine(")");
+    }
+    // Visar huvudmenyn och returnerar spelarens val (1-4).
+    public int ShowMenu()
+    {
+        Console.WriteLine();
+        Console.WriteLine("=== TJUGOETT ===");
+        Console.WriteLine("1. Lägg till spelare");
+        Console.WriteLine("2. Spela en runda");
+        Console.WriteLine("3. Visa statistik");
+        Console.WriteLine("4. Avsluta");
+        return AskNumber("Välj (1-4): ", 1, 4);
+    }
+    // Visar slutläget efter en runda: alla händer och varje spelares resultat.
+    public void ShowResults(Dealer dealer, Dictionary<Player, Outcome> results)
+    {
+        Console.WriteLine();
+        Console.WriteLine("--- Resultat ---");
+        ShowHand(dealer, false);
+
+        foreach (KeyValuePair<Player, Outcome> result in results)
+        {
+            ShowHand(result.Key, false);
+            Console.WriteLine("  → " + OutcomeText(result.Value));
+        }
+    }
+
+    // Översätter ett resultat till svensk text.
+    private string OutcomeText(Outcome outcome)
+    {
+        return outcome switch
+        {
+            Outcome.Win => "Vinst",
+            Outcome.Blackjack => "Vinst med tjugoett!",
+            Outcome.Push => "Lika",
+            Outcome.Lose => "Förlust",
+            _ => "?"
+        };
+    }
+    // Visar vinster, förluster och lika för varje spelare.
+    public void ShowStatistics(List<Player> players)
+    {
+        Console.WriteLine();
+        Console.WriteLine("--- Statistik ---");
+
+        if (players.Count == 0)
+        {
+            Console.WriteLine("Inga spelare än.");
+            return;
+        }
+
+        foreach (Player player in players)
+        {
+            Console.WriteLine(player.Name + ": " + player.Wins + " vinster, "
+                + player.Losses + " förluster, " + player.Pushes + " lika");
+        }
+    }
+
+    // Skriver ut ett kort meddelande till spelaren, t.ex. ett felmeddelande från Game.
+    public void ShowMessage(string message)
+    {
+        Console.WriteLine(message);
+    }
 }
-
-
-
-
