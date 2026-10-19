@@ -203,4 +203,30 @@ public class ConsoleUi
         Console.WriteLine("4. Avsluta");
         return AskNumber("Välj (1-4): ", 1, 4);
     }
+    // Visar slutläget efter en runda: alla händer och varje spelares resultat.
+    public void ShowResults(Dealer dealer, Dictionary<Player, Outcome> results)
+    {
+        Console.WriteLine();
+        Console.WriteLine("--- Resultat ---");
+        ShowHand(dealer, false);
+
+        foreach (KeyValuePair<Player, Outcome> result in results)
+        {
+            ShowHand(result.Key, false);
+            Console.WriteLine("  → " + OutcomeText(result.Value));
+        }
+    }
+
+    // Översätter ett resultat till svensk text.
+    private string OutcomeText(Outcome outcome)
+    {
+        return outcome switch
+        {
+            Outcome.Win => "Vinst",
+            Outcome.Blackjack => "Vinst med tjugoett!",
+            Outcome.Push => "Lika",
+            Outcome.Lose => "Förlust",
+            _ => "?"
+        };
+    }
 }
