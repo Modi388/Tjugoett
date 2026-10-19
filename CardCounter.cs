@@ -20,4 +20,9 @@ public class CardCounter
             _runningCount --;
         }
     }
+    
+    public void Reset()
+    {
+        _runningCount = 0;
+    }
 }
