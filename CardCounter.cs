@@ -13,16 +13,20 @@ public class CardCounter
         }
         else if (card.Rank <= Rank.Nine)
         {
-           // 7-9 neutrala: räkningen ändras inte
+            // 7-9 neutrala: räkningen ändras inte
         }
         else
         {
-            _runningCount --;
+            _runningCount--;
         }
     }
-    
     public void Reset()
     {
         _runningCount = 0;
+    }
+
+    public double TrueCount(double decksRemaining)
+    {
+        return _runningCount / decksRemaining;
     }
 }
