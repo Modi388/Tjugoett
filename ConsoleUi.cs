@@ -1,5 +1,3 @@
-using System.Formats.Asn1;
-using Tjugoett;
 
 namespace Tjugoett;
 
@@ -84,8 +82,47 @@ public class ConsoleUi
             Console.WriteLine("Ogiltigt val. Skriv k för att köpa eller s för att stanna.");
         }
     }
+
+    // Visar en deltagares kort och handens värde.
+    // hideHoleCard = true döljer givarens andra kort (hålkortet).
+    public void ShowHand(Participant participant, bool hideHoleCard)
+    {
+        Console.Write(participant.Name + ": ");
+
+        IReadOnlyList<Card> cards = participant.Hand.Cards;
+        for (int i = 0; i < cards.Count; i++)
+        {
+            if (hideHoleCard && i == 1)
+            {
+                Console.Write("[??]");
+            }
+            else
+            {
+                WriteCard(cards[i]);
+            }
+            Console.Write(" ");
+        }
+
+        if (hideHoleCard)
+        {
+            Console.WriteLine();
+            return;
+        }
+
+        Console.Write("(" + participant.Hand.Value);
+        if (participant.Hand.IsSoft)
+        {
+            Console.Write(" mjuk");
+        }
+        Console.WriteLine(")");
+
+        if (participant.Hand.IsBust)
+        {
+            Console.WriteLine("Spräckt!");
+        }
+        else if (participant.Hand.IsBlackjack)
+        {
+            Console.WriteLine("Tjugoett!");
+        }
+    }
 }
-
-
-
-
