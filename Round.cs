@@ -20,7 +20,41 @@ public class Round
         _dealer = dealer;
         _players = players;
     }
-    
+
+    // Startar en ny spelrunda
+    public Dictionary<Player, Outcome> Play()
+    {
+        // Blandar om kortleken om det finns för få kort kvar
+        if (_deck.NeedsReshuffle)
+        {
+            _deck.Reset();
+        }
+
+        Dictionary<Player, Outcome> results = new();
+
+        // Tömmer givarens hand inför en ny runda
+        _dealer.Hand.Clear();
+
+        // Tömmer alla spelares händer inför en ny runda
+        foreach (Player player in _players)
+        {
+            player.Hand.Clear();
+        }
+
+        // Delar ut två kort till varje spelare och givaren
+        for (int i = 0; i < 2; i++)
+        {
+            foreach (Player player in _players)
+            {
+                player.ReceiveCard(_deck.Draw());
+            }
+
+            _dealer.ReceiveCard(_deck.Draw());
+        }
+
+        return results;
+    }
+
     // Avgör resultatet mellan spelaren och dealern
     public static Outcome Resolve(Hand player, Hand dealer)
     {
@@ -41,7 +75,7 @@ public class Round
         {
             return Outcome.Blackjack;
         }
-        
+
         // Om bara dealern har Blackjack förlorar spelaren
         if (dealer.IsBlackjack)
         {
