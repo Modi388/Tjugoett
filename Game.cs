@@ -76,8 +76,8 @@ public class Game
 
             if (player == null)
             {
-                player = new Player(name, new HumanStrategy(_ui, name));
-                _allPlayers.Add(player);
+                int type = _ui.AskPlayerType(name);
+player = new Player(name, CreateStrategy(type, name));
             }
             else if (_tablePlayers.Contains(player))
             {
@@ -108,6 +108,14 @@ public class Game
 
     // Spelar en runda. Byggs i nästa steg.
     // Spelar en runda med spelarna vid bordet, visar resultatet och sparar.
+
+    // Väljer vem som fattar besluten åt spelaren.
+private IPlayerStrategy CreateStrategy(int type, string name)
+{
+    if (type == 2) return new SimpleStrategy();
+    if (type == 3) return new BasicStrategy();
+    return new HumanStrategy(_ui, name);
+}
     private void PlayRound()
     {
         if (_tablePlayers.Count == 0)
