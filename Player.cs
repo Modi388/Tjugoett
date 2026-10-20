@@ -8,6 +8,9 @@ public class Player : Participant // Spelaren ärver namn och hand från Partici
     public int Losses { get; private set; }
     public int Pushes { get; private set; }
 
+    // Spelarens marker och satsningar
+    public Betting Betting { get; } = new Betting();
+
     public Player(string name, IPlayerStrategy strategy, int wins = 0, int losses = 0, int pushes = 0)
         : base(name) // Skickar namnet vidare till Participant
     {
