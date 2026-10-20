@@ -12,6 +12,7 @@ public class Game
     private readonly GameStorage _storage;
 
     private readonly List<Player> _allPlayers = new List<Player>();   // alla kända: från filen + nya
+    private readonly CardCounter _counter = new CardCounter();
     private readonly List<Player> _tablePlayers = new List<Player>(); // de som sitter vid bordet nu
 
     public Game(ConsoleUi ui, Deck deck, Dealer dealer, GameStorage storage)
@@ -145,7 +146,7 @@ public class Game
         player.Betting.PlaceBet(amount);
     }
 
-        Round round = new Round(_deck, _dealer, _tablePlayers);
+        Round round = new Round(_deck, _dealer, _tablePlayers, _counter);
         Dictionary<Player, Outcome> results = round.Play();
 
         // Betalar ut marker efter spelrundan
@@ -155,6 +156,7 @@ public class Game
     }
 
         _ui.ShowResults(_dealer, results);
+        _ui.ShowCount(_counter.RunningCount, _counter.TrueCount(_deck.DecksRemaining));
 
         if (!_storage.Save(_allPlayers))
         {

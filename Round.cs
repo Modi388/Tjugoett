@@ -1,4 +1,3 @@
-
 namespace Tjugoett;
 
 // Hanterar en spelrunda
@@ -13,21 +12,27 @@ public class Round
     // Spelarna som deltar i spelrundan
     private readonly List<Player> _players;
 
+    // Räknar korten som syns (tillval 5)
+    private readonly CardCounter _counter;
+
     // Tar emot kortleken, givaren och spelarna
-    public Round(Deck deck, Dealer dealer, List<Player> players)
+    public Round(Deck deck, Dealer dealer, List<Player> players, CardCounter counter)
     {
         _deck = deck;
         _dealer = dealer;
         _players = players;
+        _counter = counter;
     }
 
     // Startar en ny spelrunda
+       // Startar en ny spelrunda
     public Dictionary<Player, Outcome> Play()
     {
         // Blandar om kortleken om det finns för få kort kvar
         if (_deck.NeedsReshuffle)
         {
             _deck.Reset();
+            _counter.Reset();   // alla kort är tillbaka i skon, räkningen börjar om
         }
 
         Dictionary<Player, Outcome> results = new();
@@ -44,12 +49,21 @@ public class Round
         // Delar ut två kort till varje spelare och givaren
         for (int i = 0; i < 2; i++)
         {
+            // Spelarnas kort syns alltid
             foreach (Player player in _players)
             {
-                player.ReceiveCard(_deck.Draw());
+                player.ReceiveCard(DrawVisible());
             }
 
-            _dealer.ReceiveCard(_deck.Draw());
+            // Givarens första kort syns, det andra (hålkortet) är dolt
+            if (i == 0)
+            {
+                _dealer.ReceiveCard(DrawVisible());
+            }
+            else
+            {
+                _dealer.ReceiveCard(_deck.Draw());
+            }
         }
 
         // Varje spelare får välja att ta kort eller stanna
@@ -70,14 +84,17 @@ public class Round
                 }
 
                 // Ger spelaren ett nytt kort
-                player.ReceiveCard(_deck.Draw());
+                player.ReceiveCard(DrawVisible());
             }
         }
+
+        // Givaren vänder sitt hålkort, nu ser alla det och räknaren får räkna det
+        _counter.Observe(_dealer.Hand.Cards[1]);
 
         // Givaren drar kort tills den ska stanna
         while (_dealer.ShouldHit())
         {
-            _dealer.ReceiveCard(_deck.Draw());
+            _dealer.ReceiveCard(DrawVisible());
         }
 
         // Avgör och sparar resultatet för varje spelare
@@ -140,5 +157,12 @@ public class Round
 
         // Om båda har lika många poäng blir det oavgjort
         return Outcome.Push;
+    }
+    // Drar ett kort som alla vid bordet ser, och låter räknaren räkna det
+    private Card DrawVisible()
+    {
+        Card card = _deck.Draw();
+        _counter.Observe(card);
+        return card;
     }
 }
