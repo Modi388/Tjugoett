@@ -3,6 +3,7 @@ namespace Tjugoett;
 
 public class ConsoleUi
 {
+    private readonly CardRenderer _renderer = new CardRenderer();
     public ConsoleUi()
     {
         Console.OutputEncoding = System.Text.Encoding.UTF8;   // så att ♥♦♣♠ visas rätt
@@ -91,21 +92,8 @@ public class ConsoleUi
     // hideHoleCard = true döljer givarens andra kort (hålkortet).
     public void ShowHand(Participant participant, bool hideHoleCard)
     {
-        Console.Write(participant.Name + ": ");
-
-        IReadOnlyList<Card> cards = participant.Hand.Cards;
-        for (int i = 0; i < cards.Count; i++)
-        {
-            if (hideHoleCard && i == 1)
-            {
-                Console.Write("[??]");
-            }
-            else
-            {
-                WriteCard(cards[i]);
-            }
-            Console.Write(" ");
-        }
+        Console.WriteLine(participant.Name + ":");
+        WriteCardRow(participant.Hand.Cards, hideHoleCard);
 
         if (hideHoleCard)
         {
@@ -155,6 +143,16 @@ public class ConsoleUi
         }
         return names;
     }
+// Frågar om spelaren ska styras av en människa eller av datorn.
+public int AskPlayerType(string name)
+{
+    Console.WriteLine("Vem styr " + name + "?");
+    Console.WriteLine("1. Människa");
+    Console.WriteLine("2. Dator (enkel: köper under 17)");
+    Console.WriteLine("3. Dator (grundstrategi)");
+    return AskNumber("Välj 1-3: ", 1, 3);
+}
+
 
     // Frågar efter ett heltal mellan min och max. Frågar igen tills svaret är giltigt.
     private int AskNumber(string question, int min, int max)
@@ -177,18 +175,11 @@ public class ConsoleUi
     // givarens öppna kort och spelarens egen hand.
     public void ShowTurn(string playerName, Hand hand, Card dealerUpcard)
     {
-        Console.WriteLine();
-        Console.Write("Givarens öppna kort: ");
-        WriteCard(dealerUpcard);
-        Console.WriteLine();
+        Console.WriteLine("Givarens öppna kort:");
+        WriteCardRow(new List<Card> { dealerUpcard }, false);
 
-        Console.Write(playerName + ": ");
-        foreach (Card card in hand.Cards)
-        {
-            WriteCard(card);
-            Console.Write(" ");
-        }
-
+        Console.WriteLine(playerName + ":");
+        WriteCardRow(hand.Cards, false);
         Console.Write("(" + hand.Value);
         if (hand.IsSoft)
         {
@@ -257,14 +248,57 @@ public class ConsoleUi
     {
         Console.WriteLine(message);
     }
-
-    // Frågar spelaren hur många marker den vill satsa
-    public int AskBet(string playerName, int balance)
+    // Skriver ut flera kort BREDVID varandra.
+    // Vi kan inte skriva ett kort i taget, eftersom då hamnar de under varandra.
+    // I stället skriver vi rad 0 för alla kort, sedan rad 1 för alla kort, osv.
+    private void WriteCardRow(IReadOnlyList<Card> cards, bool hideHoleCard)
     {
-        return AskNumber(
-            playerName + ", du har " + balance + " marker. Hur mycket vill du satsa (1-" + balance + ")? ",
-            1,
-            balance
+        List<string[]> pictures = new List<string[]>();
+        List<bool> isRed = new List<bool>();
+
+        for (int i = 0; i < cards.Count; i++)
+        {
+            if (hideHoleCard && i == 1)
+            {
+                pictures.Add(_renderer.RenderBack());
+                isRed.Add(false);
+            }
+            else
+            {
+                Card card = cards[i];
+                pictures.Add(_renderer.RenderFront(RankText(card.Rank), SuitSymbol(card.Suit)));
+                isRed.Add(card.Suit == Suit.Hearts || card.Suit == Suit.Diamonds);
+            }
+        }
+
+        if (pictures.Count == 0)
+        {
+            return;
+        }
+
+        for (int line = 0; line < pictures[0].Length; line++)
+        {
+            for (int c = 0; c < pictures.Count; c++)
+            {
+                if (isRed[c])
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                }
+                Console.Write(pictures[c][line]);
+                Console.ResetColor();
+                Console.Write(" ");
+            }
+            Console.WriteLine();
+        }
+    }
+
+        // Frågar spelaren hur många marker den vill satsa
+        public int AskBet(string playerName, int balance)
+        {
+            return AskNumber(
+        playerName + ", du har " + balance + " marker. Hur mycket vill du satsa (1-" + balance + ")? ",
+        1,
+        balance
         );
     }
 }
