@@ -11,7 +11,7 @@ public class Round
 
     // Spelarna som deltar i spelrundan
     private readonly List<Player> _players;
-    
+
     // Räknar korten som syns (tillval 5)
     private readonly CardCounter _counter;
 
@@ -143,5 +143,12 @@ public class Round
 
         // Om båda har lika många poäng blir det oavgjort
         return Outcome.Push;
+    }
+    // Drar ett kort som alla vid bordet ser, och låter räknaren räkna det
+    private Card DrawVisible()
+    {
+        Card card = _deck.Draw();
+        _counter.Observe(card);    
+        return card;
     }
 }
