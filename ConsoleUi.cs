@@ -92,21 +92,8 @@ public class ConsoleUi
     // hideHoleCard = true döljer givarens andra kort (hålkortet).
     public void ShowHand(Participant participant, bool hideHoleCard)
     {
-        Console.Write(participant.Name + ": ");
-
-        IReadOnlyList<Card> cards = participant.Hand.Cards;
-        for (int i = 0; i < cards.Count; i++)
-        {
-            if (hideHoleCard && i == 1)
-            {
-                Console.Write("[??]");
-            }
-            else
-            {
-                WriteCard(cards[i]);
-            }
-            Console.Write(" ");
-        }
+        Console.WriteLine(participant.Name + ":");
+        WriteCardRow(participant.Hand.Cards, hideHoleCard);
 
         if (hideHoleCard)
         {
@@ -178,18 +165,11 @@ public class ConsoleUi
     // givarens öppna kort och spelarens egen hand.
     public void ShowTurn(string playerName, Hand hand, Card dealerUpcard)
     {
-        Console.WriteLine();
-        Console.Write("Givarens öppna kort: ");
-        WriteCard(dealerUpcard);
-        Console.WriteLine();
+        Console.WriteLine("Givarens öppna kort:");
+        WriteCardRow(new List<Card> { dealerUpcard }, false);
 
-        Console.Write(playerName + ": ");
-        foreach (Card card in hand.Cards)
-        {
-            WriteCard(card);
-            Console.Write(" ");
-        }
-
+        Console.WriteLine(playerName + ":");
+        WriteCardRow(hand.Cards, false);
         Console.Write("(" + hand.Value);
         if (hand.IsSoft)
         {
