@@ -300,6 +300,8 @@ public class ConsoleUi
         1,
         balance
         );
+        }
+
     public void ShowCount(int runningCount, double trueCount)
     {
         Console.WriteLine("Running count: " + runningCount);
