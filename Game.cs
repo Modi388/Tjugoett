@@ -119,8 +119,32 @@ public class Game
         _ui.ShowMessage("");
         _ui.ShowMessage("--- Ny runda ---");
 
+
+        // Frågar varje spelare hur många marker de vill satsa
+        foreach (Player player in _tablePlayers)
+    {
+        // Spelaren kan inte satsa om markerna är slut
+        if (player.Betting.Balance == 0)
+        {
+            _ui.ShowMessage(player.Name + " har inga marker kvar.");
+            continue;
+        }
+
+        // Frågar efter satsningen
+        int amount = _ui.AskBet(player.Name, player.Betting.Balance);
+
+        // Sparar satsningen och drar av markerna
+        player.Betting.PlaceBet(amount);
+    }
+
         Round round = new Round(_deck, _dealer, _tablePlayers);
         Dictionary<Player, Outcome> results = round.Play();
+
+        // Betalar ut marker efter spelrundan
+        foreach (KeyValuePair<Player, Outcome> result in results)
+    {
+        result.Key.Betting.SettleBet(result.Value);
+    }
 
         _ui.ShowResults(_dealer, results);
 
