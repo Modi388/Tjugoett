@@ -155,6 +155,16 @@ public class ConsoleUi
         }
         return names;
     }
+// Frågar om spelaren ska styras av en människa eller av datorn.
+public int AskPlayerType(string name)
+{
+    Console.WriteLine("Vem styr " + name + "?");
+    Console.WriteLine("1. Människa");
+    Console.WriteLine("2. Dator (enkel: köper under 17)");
+    Console.WriteLine("3. Dator (grundstrategi)");
+    return AskNumber("Välj 1-3: ", 1, 3);
+}
+
 
     // Frågar efter ett heltal mellan min och max. Frågar igen tills svaret är giltigt.
     private int AskNumber(string question, int min, int max)
