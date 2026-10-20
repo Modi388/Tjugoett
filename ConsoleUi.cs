@@ -291,6 +291,17 @@ public class ConsoleUi
             Console.WriteLine();
         }
     }
+
+        // Frågar spelaren hur många marker den vill satsa
+        public int AskBet(string playerName, int balance)
+        {
+            return AskNumber(
+        playerName + ", du har " + balance + " marker. Hur mycket vill du satsa (1-" + balance + ")? ",
+        1,
+        balance
+        );
+        }
+
     public void ShowCount(int runningCount, double trueCount)
     {
         Console.WriteLine("Running count: " + runningCount);
