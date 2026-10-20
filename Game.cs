@@ -132,6 +132,7 @@ private IPlayerStrategy CreateStrategy(int type, string name)
         Dictionary<Player, Outcome> results = round.Play();
 
         _ui.ShowResults(_dealer, results);
+        _ui.ShowCount(_counter.RunningCount, _counter.TrueCount(_deck.DecksRemaining));
 
         if (!_storage.Save(_allPlayers))
         {
