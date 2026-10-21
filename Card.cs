@@ -1,15 +1,17 @@
 namespace Tjugoett;
-
+// spelkort. 
 public class Card
 {
-    // property
+    // bara get
     public Suit Suit { get; }
     public Rank Rank { get; }
 
-    // Get the points from the pointDictionary for the rank of this Card
-    public int Points { get
+    // slås upp i tabellen
+    public int Points
+    {
+        get
         {
-             return pointDictionary[Rank];
+            return pointDictionary[Rank];
         }
     }
 
