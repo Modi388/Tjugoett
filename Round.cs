@@ -83,7 +83,7 @@ public class Round
                     break;
                 }
 
-                // Ger spelaren ett nytt kort
+                // Ger spelaren ett nytt kort move
                 player.ReceiveCard(DrawVisible());
             }
         }

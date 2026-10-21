@@ -1,5 +1,6 @@
 namespace Tjugoett;
 
+// Tillval 5
 public class CardCounter
 {
     private int _runningCount;
@@ -20,11 +21,14 @@ public class CardCounter
             _runningCount--;
         }
     }
+
+    
     public void Reset()
     {
         _runningCount = 0;
     }
 
+// Jämnar ut räkningen efter anrtal korrlekar.
     public double TrueCount(double decksRemaining)
     {
         return _runningCount / decksRemaining;
