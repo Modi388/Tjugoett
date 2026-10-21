@@ -1,13 +1,15 @@
 namespace Tjugoett;
 
+// aldrig console. Bara data.
 public class GameStorage
 {
-    private readonly string _filePath;
+    private readonly string _filePath; // player.txt skickas in
 
     public GameStorage(string filePath)
     {
         _filePath = filePath;
     }
+
 
     public List<PlayerRecord> Load()
     {
@@ -23,15 +25,15 @@ public class GameStorage
         {
             lines = File.ReadAllLines(_filePath);
         }
-        catch (IOException)
+        catch (IOException) // låst eller trasig
         {
             return records;
         }
-        catch (UnauthorizedAccessException)
+        catch (UnauthorizedAccessException) // ingen tillgång
         {
             return records;
         }
-
+// Mohammed;3;2;1
         foreach (string line in lines)
         {
             string[] parts = line.Split(';');
@@ -45,7 +47,7 @@ public class GameStorage
                 !int.TryParse(parts[2], out int losses) ||
                 !int.TryParse(parts[3], out int pushes))
             {
-                continue;
+                continue; 
             }
 
             records.Add(new PlayerRecord(parts[0], wins, losses, pushes));
@@ -54,6 +56,7 @@ public class GameStorage
         return records;
     }
 
+// skriver till filen.
     public bool Save(IEnumerable<Player> players)
     {
         List<string> lines = new();
