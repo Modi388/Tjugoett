@@ -175,8 +175,9 @@ public class ConsoleUi
     // givarens öppna kort och spelarens egen hand.
     public void ShowTurn(string playerName, Hand hand, Card dealerUpcard)
     {
-        Console.WriteLine("Givarens öppna kort:");
-        WriteCardRow(new List<Card> { dealerUpcard }, false);
+        Console.WriteLine();
+        Console.WriteLine("Givaren:");
+        WriteCardRow(new List<Card> { dealerUpcard }, false, true);
 
         Console.WriteLine(playerName + ":");
         WriteCardRow(hand.Cards, false);
@@ -251,7 +252,7 @@ public class ConsoleUi
     // Skriver ut flera kort BREDVID varandra.
     // Vi kan inte skriva ett kort i taget, eftersom då hamnar de under varandra.
     // I stället skriver vi rad 0 för alla kort, sedan rad 1 för alla kort, osv.
-    private void WriteCardRow(IReadOnlyList<Card> cards, bool hideHoleCard)
+    private void WriteCardRow(IReadOnlyList<Card> cards, bool hideHoleCard, bool addCardBack = false)
     {
         List<string[]> pictures = new List<string[]>();
         List<bool> isRed = new List<bool>();
@@ -270,7 +271,11 @@ public class ConsoleUi
                 isRed.Add(card.Suit == Suit.Hearts || card.Suit == Suit.Diamonds);
             }
         }
-
+        if (addCardBack)
+        {
+            pictures.Add(_renderer.RenderBack());
+            isRed.Add(false);
+        }
         if (pictures.Count == 0)
         {
             return;
